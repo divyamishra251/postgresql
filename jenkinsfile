@@ -28,7 +28,11 @@ pipeline {
 
         stage('Terraform Apply/Destroy') {
             steps {
-                sh 'terraform -chdir=infra_setup ${params.action} --auto-approve'
+                // FIX: using bash to allow ${params.action} to work
+                sh '''
+                #!/bin/bash
+                terraform -chdir=infra_setup ${action} --auto-approve
+                '''
             }
         }
 
@@ -54,7 +58,10 @@ pipeline {
                 input message: 'Do you approve running the Ansible playbook?', ok: 'Yes', submitter: 'divya'
                 script {
                     echo "Running Ansible Playbook..."
-                    sh 'ansible-playbook -i postgres.aws_ec2.yml postgresql.yml'
+                    sh '''
+                    #!/bin/bash
+                    ansible-playbook -i postgres.aws_ec2.yml postgresql.yml
+                    '''
                 }
             }
         }
