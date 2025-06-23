@@ -1,0 +1,15 @@
+plugin: amazon.aws.aws_ec2
+regions:
+  - ap-south-1
+
+filters:
+  tag:Name:
+    - "postgres-private-instance-1"
+    - "postgres-private-instance-2"
+
+compose:
+  ansible_host: private_ip_address
+
+strict: False
+cache: True
+cache_timeout: 300

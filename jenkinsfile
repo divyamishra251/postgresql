@@ -1,0 +1,62 @@
+pipeline {
+    parameters {
+        choice(name: 'action', choices: ['apply', 'destroy'], description: 'Select the action to perform')
+    }
+
+    environment {
+        AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        AWS_DEFAULT_REGION    = 'ap-south-1'
+    }
+
+    agent any
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git url: 'https://github.com/divyamishra251/postgresql.git', branch: 'main'
+            }
+        }
+
+        stage('Terraform Init & Plan') {
+            steps {
+                sh 'terraform -chdir=infra_setup init'
+                sh 'terraform -chdir=infra_setup validate'
+                sh 'terraform -chdir=infra_setup plan'
+            }
+        }
+
+        stage('Terraform Apply/Destroy') {
+            steps {
+                sh 'terraform -chdir=infra_setup ${params.action} --auto-approve'
+            }
+        }
+
+        stage('Sleep After Apply') {
+            when {
+                expression {
+                    return params.action == 'apply'
+                }
+            }
+            steps {
+                echo "Sleeping for 10 seconds after terraform apply"
+                sleep 10
+            }
+        }
+
+        stage('Approve and Run Ansible Playbook') {
+            when {
+                expression {
+                    return params.action == 'apply'
+                }
+            }
+            steps {
+                input message: 'Do you approve running the Ansible playbook?', ok: 'Yes', submitter: 'divya'
+                script {
+                    echo "Running Ansible Playbook..."
+                    sh 'ansible-playbook -i postgres.aws_ec2.yml postgresql.yml'
+                }
+            }
+        }
+    }
+}

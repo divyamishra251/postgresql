@@ -1,0 +1,13 @@
+aws_region              = "ap-south-1"
+vpc_cidr                = "10.0.0.0/16"
+public_subnet_cidr      = "10.0.1.0/24"
+private_subnet_cidr     = "10.0.2.0/24"
+availability_zone       = "ap-south-1a"
+project_name            = "postgres"
+instance_type           = "t2.micro"
+key_name                = "apsouth"
+
+# Jenkins VPC Configuration (REQUIRED)
+jenkins_vpc_id = "vpc-08d79fe0ccd617e84"
+jenkins_route_table_id = "rtb-0cc5f7e5011a1f418"
+jenkins_vpc_cidr       = "172.31.0.0/16"

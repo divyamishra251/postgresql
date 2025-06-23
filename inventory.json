@@ -1,0 +1,42 @@
+{
+  "nat_gateway_ip": {
+    "sensitive": false,
+    "type": "string",
+    "value": "13.204.40.190"
+  },
+  "peering_connection_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "pcx-0303c91fa21768f6e"
+  },
+  "private_instance_1_private_ip": {
+    "sensitive": false,
+    "type": "string",
+    "value": "10.0.2.56"
+  },
+  "private_instance_2_private_ip": {
+    "sensitive": false,
+    "type": "string",
+    "value": "10.0.2.243"
+  },
+  "private_subnet_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "subnet-0a3341302f0e4c735"
+  },
+  "public_instance_public_ip": {
+    "sensitive": false,
+    "type": "string",
+    "value": "13.127.254.204"
+  },
+  "public_subnet_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "subnet-0df4eef94c6ecad93"
+  },
+  "vpc_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "vpc-0c193e6e613319208"
+  }
+}

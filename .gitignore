@@ -1,0 +1,9 @@
+# Terraform state
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+
+# Ansible artifacts (optional)
+*.retry
+*.log

@@ -1,0 +1,6 @@
+---
+- name: Installing postgresql my tool
+  hosts: aws_ec2
+  become: true
+  roles:
+    - postgresql_role
