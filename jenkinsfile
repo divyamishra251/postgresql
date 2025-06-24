@@ -60,7 +60,7 @@ pipeline {
                     sh '''
                     #!/bin/bash
                     export ANSIBLE_HOST_KEY_CHECKING=False
-                    ansible-playbook -i ansiblerole/postgres.aws_ec2.yml ansiblerole/playbook.yml --private-key /home/ubuntu/apsouth.pem
+                    ansible-playbook -i ansiblerole/postgres.aws_ec2.yml ansiblerole/playbook.yml --private-key /var/lib/jenkins/workspace/postgresql-infra/ansiblerole/postgres.aws_ec2.yml
                     '''
                 }
             }
