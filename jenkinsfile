@@ -28,7 +28,6 @@ pipeline {
 
         stage('Terraform Apply/Destroy') {
             steps {
-                // FIX: using bash to allow ${params.action} to work
                 sh '''
                 #!/bin/bash
                 terraform -chdir=infra_setup ${action} --auto-approve
@@ -60,7 +59,7 @@ pipeline {
                     echo "Running Ansible Playbook..."
                     sh '''
                     #!/bin/bash
-                    ansible-playbook -i postgres.aws_ec2.yml postgresql.yml
+                    ansible-playbook -i ansiblerole/postgres.aws_ec2.yml ansiblerole/playbook.yml
                     '''
                 }
             }
