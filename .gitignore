@@ -7,3 +7,5 @@
 # Ansible artifacts (optional)
 *.retry
 *.log
+
+infra_setup/apsouth.pem

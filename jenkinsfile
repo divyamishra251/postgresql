@@ -59,7 +59,7 @@ pipeline {
                     echo "Running Ansible Playbook..."
                     sh '''
                     #!/bin/bash
-                    ansible-playbook -i ansiblerole/postgres.aws_ec2.yml ansiblerole/playbook.yml
+                    ansible-playbook -i ansiblerole/postgres.aws_ec2.yml ansiblerole/playbook.yml --private-key ./apsouth.pem
                     '''
                 }
             }
