@@ -1,4 +1,4 @@
-# Public Instance
+# Public Instance (Jenkins EC2)
 resource "aws_instance" "public" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
@@ -10,7 +10,6 @@ resource "aws_instance" "public" {
     Name = "${var.project_name}-public-instance"
   }
 
-  # Provisioner to copy PEM file to Jenkins EC2 instance
   provisioner "file" {
     source      = "${path.module}/../../apsouth.pem"
     destination = "/tmp/apsouth.pem"
@@ -23,7 +22,6 @@ resource "aws_instance" "public" {
     }
   }
 
-  # Move and set permissions on Jenkins EC2
   provisioner "remote-exec" {
     inline = [
       "sudo mv /tmp/apsouth.pem /var/lib/jenkins/apsouth.pem",
@@ -41,7 +39,7 @@ resource "aws_instance" "public" {
   }
 }
 
-# Private Instance 1
+# Private Instance 1 (PostgreSQL Node 1)
 resource "aws_instance" "private_1" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
@@ -52,21 +50,9 @@ resource "aws_instance" "private_1" {
   tags = {
     Name = "${var.project_name}-private-instance-1"
   }
-
-  # Optional: test SSH from Jenkins to private instance
-  provisioner "remote-exec" {
-    inline = ["echo SSH connection to private_instance_1 successful!"]
-
-    connection {
-      type        = "ssh"
-      user        = "ubuntu"
-      private_key = file("${path.module}/../../apsouth.pem")
-      host        = self.private_ip
-    }
-  }
 }
 
-# Private Instance 2
+# Private Instance 2 (PostgreSQL Node 2)
 resource "aws_instance" "private_2" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
@@ -76,17 +62,5 @@ resource "aws_instance" "private_2" {
 
   tags = {
     Name = "${var.project_name}-private-instance-2"
-  }
-
-  # Optional: test SSH from Jenkins to private instance
-  provisioner "remote-exec" {
-    inline = ["echo SSH connection to private_instance_2 successful!"]
-
-    connection {
-      type        = "ssh"
-      user        = "ubuntu"
-      private_key = file("${path.module}/../../apsouth.pem")
-      host        = self.private_ip
-    }
   }
 }
