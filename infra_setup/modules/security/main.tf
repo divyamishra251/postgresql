@@ -35,13 +35,22 @@ resource "aws_security_group" "private_sg" {
     cidr_blocks = [var.vpc_cidr, var.jenkins_vpc_cidr, var.public_subnet_cidr]
   }
 
-  # ✅ New rule to allow SSH from Jenkins SG
+  # ✅ Existing rule: Allow SSH from Jenkins SG
   ingress {
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
     security_groups = [aws_security_group.jenkins_sg.id]
     description     = "Allow SSH from Jenkins"
+  }
+
+  # ✅ NEW RULE: Allow SSH from Jenkins Private IP (manual access if needed)
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["172.31.25.78/32"]
+    description = "Allow SSH from Jenkins private IP"
   }
 
   egress {
