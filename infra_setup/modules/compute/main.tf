@@ -11,13 +11,13 @@ resource "aws_instance" "public" {
     Name = "${var.project_name}-public-instance"
   }
 
-  provisioner "local-exec" {
-    command = <<EOT
-      cp /var/lib/jenkins/workspace/postgresql-infra/apsouth.pem /tmp/apsouth.pem && \
-      chown jenkins:jenkins /tmp/apsouth.pem && \
-      chmod 400 /tmp/apsouth.pem
-    EOT
-  }
+provisioner "local-exec" {
+  command = <<EOT
+    sudo cp /var/lib/jenkins/workspace/postgresql-infra/apsouth.pem /tmp/apsouth.pem && \
+    sudo chown jenkins:jenkins /tmp/apsouth.pem && \
+    sudo chmod 400 /tmp/apsouth.pem
+  EOT
+}
 
   provisioner "file" {
     source      = "/tmp/apsouth.pem"
