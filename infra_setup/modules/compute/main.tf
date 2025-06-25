@@ -13,9 +13,9 @@ resource "aws_instance" "public" {
 
 provisioner "local-exec" {
   command = <<EOT
-    sudo cp /var/lib/jenkins/workspace/postgresql-infra/apsouth.pem /tmp/apsouth.pem && \
-    sudo chown jenkins:jenkins /tmp/apsouth.pem && \
-    sudo chmod 400 /tmp/apsouth.pem
+    echo 'jenkins_password' | sudo -S cp /var/lib/jenkins/workspace/postgresql-infra/apsouth.pem /tmp/apsouth.pem && \
+    echo 'jenkins_password' | sudo -S chown jenkins:jenkins /tmp/apsouth.pem && \
+    echo 'jenkins_password' | sudo -S chmod 400 /tmp/apsouth.pem
   EOT
 }
 
