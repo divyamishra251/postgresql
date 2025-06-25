@@ -131,9 +131,8 @@ resource "aws_route" "private_to_jenkins" {
   vpc_peering_connection_id = aws_vpc_peering_connection.jenkins_peering.id
 }
 
-# ✅ NEW: Specific route for Jenkins private IP
 resource "aws_route" "private_to_jenkins_instance_ip" {
   route_table_id            = aws_route_table.private.id
-  destination_cidr_block    = "172.31.25.78/32"
+  destination_cidr_block    = "172.31.0.0/16"
   vpc_peering_connection_id = aws_vpc_peering_connection.jenkins_peering.id
 }

@@ -49,7 +49,7 @@ resource "aws_security_group" "private_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["172.31.25.78/32"]
+    cidr_blocks = ["172.31.0.0/16"]
     description = "Allow SSH from Jenkins private IP"
   }
 

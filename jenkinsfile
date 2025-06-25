@@ -60,6 +60,7 @@ pipeline {
                     echo "Running Ansible Playbook..."
                     sh '''
                     #!/bin/bash
+                    chmod 400 /var/lib/jenkins/workspace/postgresql-infra/apsouth.pem
                     export ANSIBLE_HOST_KEY_CHECKING=False
                     ansible-playbook -i ansiblerole/postgres.aws_ec2.yml ansiblerole/playbook.yml --private-key /var/lib/jenkins/workspace/postgresql-infra/apsouth.pem
                     '''
