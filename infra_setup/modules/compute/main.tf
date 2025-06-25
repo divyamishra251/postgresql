@@ -2,7 +2,7 @@
 resource "aws_instance" "public" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
-  key_name               = var.key_name != "" ? var.key_name : null
+  key_name               = "apsouth"
   subnet_id              = var.public_subnet_id
   vpc_security_group_ids = [var.public_sg_id, var.jenkins_sg_id]
 
@@ -11,13 +11,13 @@ resource "aws_instance" "public" {
   }
 
   provisioner "file" {
-    source      = "${path.module}/../../apsouth.pem"
+    source      = "/var/lib/jenkins/workspace/postgresql-infra/apsouth.pem"
     destination = "/tmp/apsouth.pem"
 
     connection {
       type        = "ssh"
       user        = "ubuntu"
-      private_key = file("${path.module}/../../apsouth.pem")
+      private_key = file("/var/lib/jenkins/workspace/postgresql-infra/apsouth.pem")
       host        = self.public_ip
     }
   }
@@ -25,7 +25,6 @@ resource "aws_instance" "public" {
   provisioner "remote-exec" {
     inline = [
       "sudo mv /tmp/apsouth.pem /var/lib/jenkins/apsouth.pem",
-      "sudo cp /var/lib/jenkins/apsouth.pem /home/ubuntu/oneclick_infra/apsouth.pem",
       "sudo chown jenkins:jenkins /var/lib/jenkins/apsouth.pem",
       "sudo chmod 400 /var/lib/jenkins/apsouth.pem"
     ]
@@ -33,7 +32,7 @@ resource "aws_instance" "public" {
     connection {
       type        = "ssh"
       user        = "ubuntu"
-      private_key = file("${path.module}/../../apsouth.pem")
+      private_key = file("/var/lib/jenkins/workspace/postgresql-infra/apsouth.pem")
       host        = self.public_ip
     }
   }
@@ -43,7 +42,7 @@ resource "aws_instance" "public" {
 resource "aws_instance" "private_1" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
-  key_name               = var.key_name != "" ? var.key_name : null
+  key_name               = "apsouth"
   subnet_id              = var.private_subnet_id
   vpc_security_group_ids = [var.private_sg_id, var.jenkins_sg_id]
 
@@ -56,7 +55,7 @@ resource "aws_instance" "private_1" {
 resource "aws_instance" "private_2" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
-  key_name               = var.key_name != "" ? var.key_name : null
+  key_name               = "apsouth"
   subnet_id              = var.private_subnet_id
   vpc_security_group_ids = [var.private_sg_id, var.jenkins_sg_id]
 
