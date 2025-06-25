@@ -1,8 +1,3 @@
-variable "vpc_cidr" {
-  description = "CIDR block for the VPC"
-  type        = string
-}
-
 variable "public_subnet_cidr" {
   description = "CIDR block for the public subnet"
   type        = string
@@ -28,12 +23,15 @@ variable "jenkins_vpc_id" {
   type        = string
 }
 
-variable "jenkins_vpc_cidr" {
-  description = "CIDR block of the Jenkins VPC"
-  type        = string
-}
-
 variable "jenkins_route_table_id" {
   description = "Route table ID of the Jenkins VPC"
   type        = string
+}
+
+variable "vpc_cidr" {
+  default = "10.0.0.0/16"
+}
+
+variable "jenkins_vpc_cidr" {
+  default = "172.31.0.0/16"
 }

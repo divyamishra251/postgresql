@@ -1,6 +1,6 @@
 # VPC
 resource "aws_vpc" "main" {
-  cidr_block = var.vpc_cidr
+  cidr_block = var.vpc_cidr  # 10.0.0.0/16
 
   tags = {
     Name = "${var.project_name}-vpc"
@@ -103,8 +103,8 @@ resource "aws_route_table_association" "private" {
 
 # VPC Peering Connection
 resource "aws_vpc_peering_connection" "jenkins_peering" {
-  peer_vpc_id = var.jenkins_vpc_id
-  vpc_id      = aws_vpc.main.id
+  peer_vpc_id = var.jenkins_vpc_id          # Jenkins VPC ID
+  vpc_id      = aws_vpc.main.id             # Private VPC (10.0.0.0/16)
   auto_accept = true
 
   tags = {
@@ -112,27 +112,24 @@ resource "aws_vpc_peering_connection" "jenkins_peering" {
   }
 }
 
-# Routes for VPC Peering
-resource "aws_route" "jenkins_to_main" {
+# Routes for VPC Peering (Both Sides)
+
+# From Jenkins → Private VPC (10.0.0.0/16)
+resource "aws_route" "jenkins_to_private" {
   route_table_id            = var.jenkins_route_table_id
-  destination_cidr_block    = var.vpc_cidr
+  destination_cidr_block    = var.vpc_cidr  # 10.0.0.0/16
+  vpc_peering_connection_id = aws_vpc_peering_connection.jenkins_peering.id
+}
+
+# From Private/Public subnet → Jenkins VPC (172.31.0.0/16)
+resource "aws_route" "private_to_jenkins" {
+  route_table_id            = aws_route_table.private.id
+  destination_cidr_block    = "172.31.0.0/16"
   vpc_peering_connection_id = aws_vpc_peering_connection.jenkins_peering.id
 }
 
 resource "aws_route" "public_to_jenkins" {
   route_table_id            = aws_route_table.public.id
-  destination_cidr_block    = var.jenkins_vpc_cidr
-  vpc_peering_connection_id = aws_vpc_peering_connection.jenkins_peering.id
-}
-
-resource "aws_route" "private_to_jenkins" {
-  route_table_id            = aws_route_table.private.id
-  destination_cidr_block    = var.jenkins_vpc_cidr
-  vpc_peering_connection_id = aws_vpc_peering_connection.jenkins_peering.id
-}
-
-resource "aws_route" "private_to_jenkins_instance_ip" {
-  route_table_id            = aws_route_table.private.id
   destination_cidr_block    = "172.31.0.0/16"
   vpc_peering_connection_id = aws_vpc_peering_connection.jenkins_peering.id
 }
