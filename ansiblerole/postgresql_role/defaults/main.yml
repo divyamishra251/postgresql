@@ -1,11 +1,12 @@
 # defaults file for postgresql_role
 
+# PostgreSQL configuration
 postgresql_version: "13"
 postgresql_user: "postgres"
 postgresql_db: "mydb"
 postgresql_port: 5432
 
-# OS-specific package lists
+# Package lists per OS
 ubuntu_packages:
   - postgresql
   - postgresql-contrib
@@ -17,13 +18,13 @@ centos_packages:
 # Dynamically select packages based on OS
 postgresql_packages: "{{ centos_packages if ansible_facts['os_family'] == 'RedHat' else ubuntu_packages }}"
 
-# PostgreSQL service name per OS
+# PostgreSQL service name
 postgresql_service_name: "{{ 'postgresql' if ansible_facts['os_family'] == 'RedHat' else 'postgresql' }}"
 
-# Data directory path (used only by RedHat)
+# Data directory (used for RedHat systems only)
 postgresql_data_dir: "/var/lib/pgsql/{{ postgresql_version }}"
 
-# Configuration file path
+# Config file path (OS-specific)
 postgresql_config_file: >-
   {{
     '/var/lib/pgsql/data/postgresql.conf'
