@@ -5,14 +5,14 @@
     state: present
   become: true
 
-- name: Remove existing PostgreSQL data directory
+- name: Remove existing PostgreSQL data directory (RedHat only)
   file:
     path: "/var/lib/pgsql/data"
     state: absent
   become: true
   when: ansible_facts['os_family'] == 'RedHat'
 
-- name: Initialize PostgreSQL database (RedHat family only)
+- name: Initialize PostgreSQL database (RedHat only)
   command: "postgresql-setup --initdb --unit postgresql"
   become: true
   when: ansible_facts['os_family'] == 'RedHat'
@@ -20,7 +20,7 @@
 
 - name: Ensure PostgreSQL config directory exists
   file:
-    path: "{{ postgresql_config_file | default('/home/ubuntu/postgresql.conf') }}"
+    path: "{{ postgresql_config_file | default('/etc/postgresql/14/main/postgresql.conf') | dirname }}"
     state: directory
     mode: '0755'
   become: true
@@ -28,7 +28,7 @@
 - name: Configure PostgreSQL
   template:
     src: postgresql.conf.j2
-    dest: "{{ postgresql_config_file | default('/home/ubuntu/postgresql.conf') }}"
+    dest: "{{ postgresql_config_file | default('/etc/postgresql/14/main/postgresql.conf') }}"
   become: true
   notify:
     - restart postgresql
@@ -39,4 +39,3 @@
     state: started
     enabled: true
   become: true
-...
