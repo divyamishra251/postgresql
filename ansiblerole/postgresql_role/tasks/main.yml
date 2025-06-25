@@ -39,3 +39,19 @@
     state: started
     enabled: true
   become: true
+
+- name: Configure pg_hba.conf
+  template:
+    src: pg_hba.conf.j2
+    dest: "/etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf"
+  become: true
+  notify: restart postgresql
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Configure pg_hba.conf (RedHat based)
+  template:
+    src: pg_hba.conf.j2
+    dest: "/var/lib/pgsql/data/pg_hba.conf"
+  become: true
+  notify: restart postgresql
+  when: ansible_facts['os_family'] == 'RedHat'
