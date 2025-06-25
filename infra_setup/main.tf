@@ -41,7 +41,7 @@ module "security" {
 module "compute" {
   source = "./modules/compute"
 
-  ami_id            = data.aws_ami.amazon_linux.id
+  ami_id            = var.ami_id
   instance_type     = var.instance_type
   key_name          = var.key_name
   public_subnet_id  = module.network.public_subnet_id
