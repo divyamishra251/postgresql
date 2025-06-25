@@ -6,6 +6,7 @@ availability_zone       = "ap-south-1a"
 project_name            = "postgres"
 instance_type           = "t2.micro"
 key_name                = "apsouth"
+ami_id                  = "ami-021a584b49225376d"
 
 # Jenkins VPC Configuration (REQUIRED)
 jenkins_vpc_id = "vpc-08d79fe0ccd617e84"
