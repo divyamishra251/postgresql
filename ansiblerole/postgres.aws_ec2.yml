@@ -1,4 +1,5 @@
 plugin: amazon.aws.aws_ec2
+
 regions:
   - ap-south-1
 
@@ -14,7 +15,6 @@ strict: False
 cache: True
 cache_timeout: 300
 
-# 👇👇👇 Place this 'defaults' section at the BOTTOM exactly like this
 defaults:
   ansible_user: ubuntu
   ansible_ssh_private_key_file: /var/lib/jenkins/workspace/postgresql-infra/apsouth.pem
