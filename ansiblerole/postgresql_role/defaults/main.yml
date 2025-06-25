@@ -22,7 +22,12 @@ postgresql_packages: "{{ centos_packages if ansible_facts['os_family'] == 'RedHa
 postgresql_service_name: "{{ 'postgresql' if ansible_facts['os_family'] == 'RedHat' else 'postgresql' }}"
 
 # Data directory (used for RedHat systems only)
-postgresql_data_dir: "/var/lib/pgsql/{{ postgresql_version }}"
+postgresql_data_dir: >-
+  {{
+    '/var/lib/pgsql/' + postgresql_version
+    if ansible_facts['os_family'] == 'RedHat'
+    else '/var/lib/postgresql/' + postgresql_version + '/main'
+  }}
 
 # Config file path (OS-specific)
 postgresql_config_file: >-
