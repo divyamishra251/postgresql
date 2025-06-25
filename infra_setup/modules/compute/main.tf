@@ -11,41 +11,7 @@ resource "aws_instance" "public" {
     Name = "${var.project_name}-public-instance"
   }
 
-provisioner "local-exec" {
-  command = <<EOT
-    echo 'jenkins_password' | sudo -S cp /var/lib/jenkins/workspace/postgresql-infra/apsouth.pem /tmp/apsouth.pem && \
-    echo 'jenkins_password' | sudo -S chown jenkins:jenkins /tmp/apsouth.pem && \
-    echo 'jenkins_password' | sudo -S chmod 400 /tmp/apsouth.pem
-  EOT
-}
-
-  provisioner "file" {
-    source      = "/tmp/apsouth.pem"
-    destination = "/tmp/apsouth.pem"
-
-    connection {
-      type        = "ssh"
-      user        = "ubuntu"
-      private_key = file("/tmp/apsouth.pem")
-      host        = self.public_ip
     }
-  }
-
-  provisioner "remote-exec" {
-    inline = [
-      "sudo mv /tmp/apsouth.pem /var/lib/jenkins/apsouth.pem",
-      "sudo chown jenkins:jenkins /var/lib/jenkins/apsouth.pem",
-      "sudo chmod 400 /var/lib/jenkins/apsouth.pem"
-    ]
-
-    connection {
-      type        = "ssh"
-      user        = "ubuntu"
-      private_key = file("/tmp/apsouth.pem")
-      host        = self.public_ip
-    }
-  }
-}
 
 # Private Instance 1 (PostgreSQL Node 1)
 resource "aws_instance" "private_1" {
