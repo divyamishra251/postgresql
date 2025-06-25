@@ -38,7 +38,7 @@ resource "aws_subnet" "private" {
     Name = "${var.project_name}-private-subnet"
   }
 }
-# private-subnet
+
 # Elastic IP for NAT Gateway
 resource "aws_eip" "nat" {
   domain = "vpc"
@@ -128,5 +128,12 @@ resource "aws_route" "public_to_jenkins" {
 resource "aws_route" "private_to_jenkins" {
   route_table_id            = aws_route_table.private.id
   destination_cidr_block    = var.jenkins_vpc_cidr
+  vpc_peering_connection_id = aws_vpc_peering_connection.jenkins_peering.id
+}
+
+# ✅ NEW: Specific route for Jenkins private IP
+resource "aws_route" "private_to_jenkins_instance_ip" {
+  route_table_id            = aws_route_table.private.id
+  destination_cidr_block    = "172.31.25.78/32"
   vpc_peering_connection_id = aws_vpc_peering_connection.jenkins_peering.id
 }
