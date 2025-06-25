@@ -62,7 +62,17 @@ pipeline {
                     #!/bin/bash
                     chmod 400 /var/lib/jenkins/workspace/postgresql-infra/apsouth.pem
                     export ANSIBLE_HOST_KEY_CHECKING=False
-                    ansible-playbook -i ansiblerole/postgres.aws_ec2.yml ansiblerole/playbook.yml --private-key /var/lib/jenkins/workspace/postgresql-infra/apsouth.pem
+
+                    # Remove previous host keys from known_hosts
+                    ips=$(ansible-inventory -i ansiblerole/postgres.aws_ec2.yml --list | jq -r '.["_meta"].hostvars | keys[]')
+                    for ip in $ips; do
+                        ssh-keygen -R $ip || true
+                    done
+
+                    # Run playbook using dynamic inventory
+                    ansible-playbook -i ansiblerole/postgres.aws_ec2.yml ansiblerole/playbook.yml \
+                        --private-key /var/lib/jenkins/workspace/postgresql-infra/apsouth.pem \
+                        -u ubuntu
                     '''
                 }
             }
