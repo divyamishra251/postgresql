@@ -63,3 +63,9 @@ variable "jenkins_route_table_id" {
   type        = string
   default     = "rtb-0cc5f7e5011a1f418"
 }
+
+variable "ami_id" {
+  description = "AMI ID"
+  type        = string
+  default     = "ami-021a584b49225376d"
+}
