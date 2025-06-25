@@ -1,4 +1,10 @@
 ---
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+  when: ansible_facts['os_family'] == 'Debian'
+
 - name: Install required PostgreSQL packages
   package:
     name: "{{ postgresql_packages }}"
